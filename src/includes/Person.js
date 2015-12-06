@@ -7,9 +7,5 @@ class Person {
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
-  
-  get somethingElse() {
-    return 'something else else';
-  }
 }
 export {Person};

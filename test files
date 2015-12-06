@@ -1,0 +1,118 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex a8ef8f1..826a782 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -1,9 +1,9 @@[m
+[31m-# ES6 Babel Browserify with reactify Boilerplate [m
+[32m+[m[32m# ES6 Babel Browserify Boilerplate for react[m[41m [m
+ [m
+ Gulp boilerplate to use ES2015 with browserify for module loading and babel for the transpiling. [m
+[31m-It's inspired by [es6-browserify-boilerplate](https://github.com/thoughtram/es6-6to5-browserify-boilerplate) and [react-app-boilerplate](https://github.com/christianalfoni/react-app-boilerplate) but I have added other common gulp task for managing Sass compilation, image optimization, etc.[m
+[32m+[m[32mIt's inspired by [es6-browserify-boilerplate](https://github.com/thoughtram/es6-6to5-browserify-boilerplate) and [react-app-boilerplate](https://github.com/christianalfoni/react-app-boilerplate) but I have also included other common gulp tasks for managing Sass compilation, image optimization, etc.[m
+ [m
+[31m-I have also included the SASS ["7 1" boilerplate](https://github.com/HugoGiraudel/sass-boilerplate) by Sass creator, Hugo Giraudel[m
+[32m+[m[32mI have included the SASS ["7 1" boilerplate](https://github.com/HugoGiraudel/sass-boilerplate) by Hugo Giraudel[m
+ [m
+ [m
+ ## Install[m
+[36m@@ -24,11 +24,13 @@[m [mRun *gulp* (default task) to build the project, compile js, Sass and start the w[m
+ [m
+ ### About bundling[m
+ [m
+[31m-As mentioned, [Browserify](http://browserify.org/), [Babel](http://babeljs.io) and [Reactify](https://github.com/andreypopp/reactify) are used to handle module loading, transpiling and transform react JSX to normal JS. [m
+[32m+[m[32mAs mentioned, [Browserify](http://browserify.org/), [Babel](http://babeljs.io) to handle module loading, transpiling and transform react JSX to normal JS.[m[41m [m
+ [m
+ The entry point to bundling everything is src/app.js. Import/require everything there and Gulp will take care of the rest. [m
+ [m
+[31m-I have even included modernizr (using browsernizr) and Jquery as required there, as well as ES2015 modules and react. Watchify watch for js files updates and emmit a sign to BrowserSync to reload when something has been updated.  [m
+[32m+[m[32mModernizr (using browsernizr), Jquery, ES2015 modules and react have been included for test.[m[41m [m
+[32m+[m
+[32m+[m[32mWatchify watch for js files updates and emmit a sign to BrowserSync to reload when something has been updated.[m[41m  [m
+ [m
+ ### ES2015[m
+ [m
+[36m@@ -49,7 +51,7 @@[m [mFast library created from Facebook team for building user interface[m
+ https://facebook.github.io/react/[m
+ [m
+ [m
+[31m-### What are all the pieces involved?[m
+[32m+[m[32m## What are all the pieces involved?[m
+ [m
+ #### [Babel][m
+ Transpiles ES6 code into regular ES5 (today's JavaScript) so that it can be run in a today browser. Like traceur but doesn't need a runtime to work. Formerly known as 6to5.[m
+[36m@@ -58,11 +60,7 @@[m [mTranspiles ES6 code into regular ES5 (today's JavaScript) so that it can be run[m
+ Babel is configured to transpile ES6 modules into CommonJS syntax and we use browserify to bundle the code into one file to deliver it to the browser.[m
+ [m
+ #### [Browserify][m
+[31m-Browserify walks through all files and traces down all `require()`s to bundle all files together.  [m
+[31m-[m
+[31m-#### [Reactify][m
+[31m-Browserify transform for JSX (superset of JavaScript used in React library) [m
+[31m-[m
+[32m+[m[32mBrowserify walks through all files and traces down all `require()`s to bundle all files together.[m[41m [m
+ [m
+ #### [Gulp][m
+ Task runner to make defining and running the tasks simpler.[m
+[1mdiff --git a/index.html b/index.html[m
+[1mindex fcd577f..40083b6 100644[m
+[1m--- a/index.html[m
+[1m+++ b/index.html[m
+[36m@@ -11,10 +11,10 @@[m
+     <meta name="mobile-web-app-capable" content="yes">[m
+   </head>[m
+   <body>[m
+[32m+[m[32m    <!-- load react test module here -->[m
+     <div class="react-root"></div>[m
+[31m-    <script src="./dist/js/app.js"> </script>[m
+[31m-    <script>[m
+[31m-      app();[m
+[31m-    </script>[m
+[32m+[m[32m    <script src="./dist/js/app.js"></script>[m
+[32m+[m[32m    <!-- Load our own custom module here -->[m
+[32m+[m[32m    <script> app(); </script>[m
+   </body>[m
+ </html>[m
+[1mdiff --git a/src/app.js b/src/app.js[m
+[1mindex 096414e..1d1754f 100644[m
+[1m--- a/src/app.js[m
+[1m+++ b/src/app.js[m
+[36m@@ -1,17 +1,20 @@[m
+[32m+[m[32m// Import modules using ES2015[m
+ import React from 'react';[m
+ import ReactDOM from 'react-dom';[m
+ import ReactComp from './includes/ReactComp';[m
+[32m+[m[32mimport $ from 'jquery';[m
+ import {Person} from './includes/Person';[m
+ import * as test from './includes/test';[m
+ [m
+[31m-// let $ = require('jquery');[m
+[31m-// require('browsernizr/test/fullscreen-api');[m
+[31m-// require('browsernizr/test/css/columns');[m
+[31m-// let Modernizr = require('browsernizr');[m
+[32m+[m[32m//also possible to use require syntax[m
+[32m+[m[32mrequire('browsernizr/test/fullscreen-api');[m
+[32m+[m[32mrequire('browsernizr/test/css/columns');[m
+[32m+[m[32mlet Modernizr = require('browsernizr');[m
+ [m
+ ReactDOM.render(<ReactComp name="Lord Vader"/>,  document.querySelector('.react-root')); [m
+[31m-[m
+[32m+[m[32m$('body').css('background', 'red');[m
+ global.app = function main() {[m
+   let person = new Person('Jerry Lee', 'Lewis');[m
+   console.log(person.fullName);[m
+[32m+[m[32m  console.log(Modernizr);[m
+ };[m
+[1mdiff --git a/src/includes/Person.js b/src/includes/Person.js[m
+[1mindex 7870b4e..62215ba 100644[m
+[1m--- a/src/includes/Person.js[m
+[1m+++ b/src/includes/Person.js[m
+[36m@@ -7,9 +7,5 @@[m [mclass Person {[m
+   get fullName() {[m
+     return `${this.firstName} ${this.lastName}`;[m
+   }[m
+[31m-  [m
+[31m-  get somethingElse() {[m
+[31m-    return 'something else else';[m
+[31m-  }[m
+ }[m
+ export {Person};[m
