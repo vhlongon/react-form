@@ -47,6 +47,7 @@ function bundle() {
   console.log('Building APP bundle');
   return getBundler()
     .transform('babelify', {
+      presets: ['es2015', 'react'],
       sourceMapRelative: config.baseUrl + '/src'
     })
     .bundle()
