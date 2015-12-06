@@ -5,11 +5,9 @@ var fs           = require('fs');
 var browserify   = require('browserify');
 var watchify     = require('watchify');
 var babelify     = require('babelify');
-var reactify     = require('reactify');
 var rimraf       = require('rimraf');
 var source       = require('vinyl-source-stream');
 var buffer       = require('vinyl-buffer');
-var _            = require('lodash');
 var browserSync  = require('browser-sync');
 var reload       = browserSync.reload;
 var uglify       = require('gulp-uglify');
@@ -18,14 +16,13 @@ var sourcemaps   = require('gulp-sourcemaps');
 var cssnext      = require('gulp-cssnext');
 var imagemin     = require('gulp-imagemin');
 var plumber      = require('gulp-plumber');
+var notify      = require('gulp-notify');
 var bundler;
 var config = {
   baseUrl: './', 
   entryFile: './src/app.js', 
   outputDir: './dist/js/', 
   outputFile: 'app.js',
-  debug: true,
-  transform: [babelify, reactify]
 };
 
 
@@ -34,8 +31,11 @@ function getBundler() {
   if (!bundler) {
     bundler = watchify(browserify({
       entries: config.entryFile, 
-      debug: config.debug,
-      transform: config.transform
+      debug: true,
+      cache: {}, 
+      packageCache: {}, 
+      fullPaths: true // Requirement of watchif
+      //transform: config.transform
     }));
   }
   return bundler;
@@ -43,7 +43,12 @@ function getBundler() {
 
 //set up bundle all files
 function bundle() {
+  var start = Date.now();
+  console.log('Building APP bundle');
   return getBundler()
+    .transform('babelify', {
+      sourceMapRelative: config.baseUrl + '/src'
+    })
     .bundle()
     .on('error', function(err) { 
       console.log('Error: ' + err.message); 
@@ -53,10 +58,13 @@ function bundle() {
     })
     .pipe(source(config.outputFile))
     .pipe(buffer())
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
+    //.pipe(sourcemaps.init({ loadMaps: true }))
+    //.pipe(uglify())
+    //.pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(config.outputDir))
+    .pipe(notify(function displayBundleMessage() {
+      console.log('APP bundle built in ' + (Date.now() - start) + 'ms');
+    }))
     .pipe(reload({stream: true}));
 }
 
@@ -96,6 +104,9 @@ gulp.task('watch', ['build-persistent'], function() {
   });
 });
 
+/** Other tasks for handling images, compiling SASS and update on html files updates */
+
+
 //compiling SCSS files
 gulp.task('styles', function() {
   //the initializer / master SCSS file, 
@@ -118,7 +129,6 @@ gulp.task('styles', function() {
                 ]
               }))
               // cssnext also prefix the css output 
-              // (compress set to false so source maps work)
               .pipe(cssnext({
                 compress: true
               }))

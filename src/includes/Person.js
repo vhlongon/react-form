@@ -9,7 +9,7 @@ class Person {
   }
   
   get somethingElse() {
-    return 'something else';
+    return 'something else else';
   }
 }
 export {Person};
