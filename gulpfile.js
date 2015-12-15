@@ -34,8 +34,7 @@ function getBundler() {
       debug: true,
       cache: {}, 
       packageCache: {}, 
-      fullPaths: true // Requirement of watchif
-      //transform: config.transform
+      fullPaths: true // Requirement of watchify
     }));
   }
   return bundler;
@@ -65,8 +64,8 @@ function bundle() {
     .pipe(gulp.dest(config.outputDir))
     .pipe(notify(function displayBundleMessage() {
       console.log('APP bundle built in ' + (Date.now() - start) + 'ms');
-    }))
-    .pipe(reload({stream: true}));
+    }));
+    //.pipe(reload({stream: true}));
 }
 
 // start web server
@@ -90,7 +89,8 @@ gulp.task('clean', function(cb) {
 
 //perform build without exiting
 gulp.task('build-persistent', ['clean'], function() {
-  return bundle();
+  return bundle()
+          .pipe(browserSync.reload({stream: true}));
 });
 
 //perform build and exists pipe / stop gulp
