@@ -2,9 +2,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import CommentBox from './includes/Commentbox';
-import {data} from './includes/data';
 
 window.React = require('React');
 
-ReactDOM.render(<CommentBox data={data} />,  document.querySelector('.react-root')); 
+ReactDOM.render(
+	<CommentBox url="src/includes/data.json" pollInterval={2000} />,  
+	document.querySelector('.react-root')
+); 
 
