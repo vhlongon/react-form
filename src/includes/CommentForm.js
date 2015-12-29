@@ -18,16 +18,16 @@ export default class CommentForm extends React.Component {
 	  if (!author || !text) {
 		  return;
 		}
-		//TODO: send request to the server
+		//send request to the server
 		this.props.onCommentSubmit({author: author, text: text});
 	  this.setState({author: '', text: ''});
 	}
   render() {
     return (
       <form className="commentForm" onSubmit={this.handleSubmit.bind(this)}>
-        <input 
-          type="text" 
-          placeholder="Your name" 
+        <input
+          type="text"
+          placeholder="Your name"
         	value={this.state.author}
           onChange={this.handleAuthorChange.bind(this)}
         />

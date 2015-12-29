@@ -12,7 +12,7 @@ export default class Commentbox extends React.Component {
   loadCommentsFromServer() {
     $.ajax({
       url: this.props.url,
-      dataType: 'json',
+      dataType: 'jsonp',
       success: (data) => {
         this.setState({data: data});
       },
@@ -22,17 +22,18 @@ export default class Commentbox extends React.Component {
     });
   }
   handleCommentSubmit(comment) {
+
   	let comments = this.state.data;
   	comment.id = Date.now();
   	let newComments = comments.concat([comment]);
   	this.setState({data: newComments});
 		$.ajax({
 			url: this.props.url,
-			dataType: 'json',
+			// dataType: 'jsonp',
 			type: 'POST',
 			data: comment,
 			success: (data) => {
-			  this.setState({data: data});
+			  //this.setState({data: data});
 			},
 			error: (xhr, status, err) => {
 				this.setState({data: comments});
